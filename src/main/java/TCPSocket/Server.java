@@ -10,23 +10,26 @@ public class Server {
     public static void main(String[] args) throws Exception {
         System.out.println("Server Started.........");
 
-        String clientMessage;
-        String outputMessage;
+        try (ServerSocket serverSocket = new ServerSocket(9806)) {
+            while (true) {
+                try (Socket connectionSocket = serverSocket.accept()) {
+                    System.out.println("Client Connection Established...");
 
-        ServerSocket serverSocket = new ServerSocket(9806);
+                    // Read the client string
+                    BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
+                    String clientMessage = inFromClient.readLine();
+                    System.out.println("CLIENT::" + clientMessage);
 
-        while (true){
-            Socket clientsocket = serverSocket.accept();
-            System.out.println("Client Connect is Established...");
+                    // Send output to client
+                    DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
+                    String outputMessage = "=== Received ===" + "\n";
+                    outToClient.writeBytes(outputMessage);
 
-            //read the client string
-            BufferedReader inFromClient = new BufferedReader(new InputStreamReader(clientsocket.getInputStream()));
-            clientMessage = inFromClient.readLine();
 
-            //send out put to client
-            DataOutputStream outToClient = new DataOutputStream(clientsocket.getOutputStream());
-            outputMessage = clientMessage + "-- Message Received ";
-            outToClient.writeBytes(outputMessage);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 }

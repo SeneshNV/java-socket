@@ -7,24 +7,27 @@ import java.net.Socket;
 
 public class Client {
     public static void main(String[] args) throws Exception {
-        System.out.println("Server Started.........");
+        System.out.println("Client Started.........");
 
-        String clientMessage;
-        String serverMessage;
+        try (Socket clientSocket = new Socket("127.0.0.1", 9806)) {
 
-        Socket clientSocket = new Socket("127.0.0.1", 9806);
+            // Client message input
+            BufferedReader inFromClient = new BufferedReader(new InputStreamReader(System.in));
+            System.out.print("Enter your Username : ");
+            String clientMessage = inFromClient.readLine();
 
-        //client message getting
-        BufferedReader inFromClient = new BufferedReader(new InputStreamReader(System.in));
-        System.out.print("Enter your Username :");
-        clientMessage = inFromClient.readLine();
+            // Send message to server
+            DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
+            outToServer.writeBytes(clientMessage + "\n");
 
-        DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
-        outToServer.writeBytes(clientMessage);
+            // Read response from server
+            BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            String serverMessage = inFromServer.readLine();
+            System.out.println("SERVER:: " + serverMessage);
 
 
-        BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-        serverMessage = inFromServer.readLine();
-        System.out.println("SERVER:: " + serverMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
