@@ -46,9 +46,9 @@ public class Client {
             while (socket.isConnected()){
                 String messageToSend = scanner.nextLine();
 
-                String encodedMessage = Base64.getEncoder().encodeToString(messageToSend.getBytes(StandardCharsets.UTF_8));
+//                String encodedMessage = Base64.getEncoder().encodeToString(messageToSend.getBytes(StandardCharsets.UTF_8));
 
-                bufferedWriter.write(username + " : " + encodedMessage);
+                bufferedWriter.write(username + " : " + messageToSend);
                 bufferedWriter.newLine();
                 bufferedWriter.flush();
             }
@@ -70,11 +70,9 @@ public class Client {
 
                         System.out.println(messageFromGroupChat);
 
-
                     } catch (IOException e) {
                         closeEverything(socket, bufferedReader, bufferedWriter);
                     }
-
                 }
             }
         }).start();
