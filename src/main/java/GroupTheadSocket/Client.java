@@ -2,6 +2,8 @@ package GroupTheadSocket;
 
 import java.io.*;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.Scanner;
 
 public class Client {
@@ -43,7 +45,10 @@ public class Client {
             Scanner scanner = new Scanner(System.in);
             while (socket.isConnected()){
                 String messageToSend = scanner.nextLine();
-                bufferedWriter.write(username + " : " + messageToSend);
+
+                String encodedMessage = Base64.getEncoder().encodeToString(messageToSend.getBytes(StandardCharsets.UTF_8));
+
+                bufferedWriter.write(username + " : " + encodedMessage);
                 bufferedWriter.newLine();
                 bufferedWriter.flush();
             }
@@ -62,7 +67,10 @@ public class Client {
                 while (socket.isConnected()){
                     try {
                         messageFromGroupChat = bufferedReader.readLine();
+
                         System.out.println(messageFromGroupChat);
+
+
                     } catch (IOException e) {
                         closeEverything(socket, bufferedReader, bufferedWriter);
                     }
@@ -107,7 +115,6 @@ public class Client {
 
         //client send messages
         client.sendMessage();
-
 
     }
 
