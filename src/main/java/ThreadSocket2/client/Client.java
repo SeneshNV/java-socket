@@ -1,11 +1,11 @@
-package ThreadSocket.client;
+package ThreadSocket2.client;
 
 import java.io.IOException;
 import java.net.Socket;
 
 public class Client {
     public static void main(String[] args) {
-        try (Socket serverSocket = new Socket("127.0.0.1", 9898)) {
+        try (Socket serverSocket = new Socket("127.0.0.1", 9999)) {
             System.out.println("Connected with Server.......");
 
             // Create and start the ClientInbox thread

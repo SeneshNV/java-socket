@@ -1,4 +1,4 @@
-package ThreadSocket.client;
+package ThreadSocket2.client;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;

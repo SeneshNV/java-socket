@@ -35,6 +35,14 @@ public class Client {
         }
     }
 
+    private String encodeMessage(String message){
+        return Base64.getEncoder().encodeToString(message.getBytes(StandardCharsets.UTF_8));
+    }
+
+    private String decodeMessage(String encodedMessage){
+        return new String(Base64.getDecoder().decode(encodedMessage), StandardCharsets.UTF_8);
+    }
+
     public  void sendMessage(){
         try {
             //Client Handler waitig for username
@@ -46,9 +54,7 @@ public class Client {
             while (socket.isConnected()){
                 String messageToSend = scanner.nextLine();
 
-//                String encodedMessage = Base64.getEncoder().encodeToString(messageToSend.getBytes(StandardCharsets.UTF_8));
-
-                bufferedWriter.write(username + " : " + messageToSend);
+                bufferedWriter.write(encodeMessage(username + " : " + messageToSend));
                 bufferedWriter.newLine();
                 bufferedWriter.flush();
             }
@@ -68,7 +74,7 @@ public class Client {
                     try {
                         messageFromGroupChat = bufferedReader.readLine();
 
-                        System.out.println(messageFromGroupChat);
+                        System.out.println(decodeMessage(messageFromGroupChat));
 
                     } catch (IOException e) {
                         closeEverything(socket, bufferedReader, bufferedWriter);

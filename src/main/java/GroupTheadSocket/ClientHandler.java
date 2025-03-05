@@ -2,7 +2,9 @@ package GroupTheadSocket;
 
 import java.io.*;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Base64;
 
 public class ClientHandler implements Runnable {
 
@@ -43,11 +45,16 @@ public class ClientHandler implements Runnable {
             clientHandlers.add(this);
 
             //broadcast Message
-            broadCastMessage("SERVER : " + clientUsername + " has entered the chat...(●'◡'●)");
+            broadCastMessage(encodeMessage("SERVER : " + clientUsername + " has entered the chat...(●'◡'●)"));
+
 
         } catch (IOException e) {
             closeEverything(socket, bufferedReader, bufferedWriter);
         }
+    }
+
+    private String encodeMessage(String message){
+        return Base64.getEncoder().encodeToString(message.getBytes(StandardCharsets.UTF_8));
     }
 
     @Override
@@ -89,7 +96,7 @@ public class ClientHandler implements Runnable {
     public void removeClientHandler(){
         //remove current client handler
         clientHandlers.remove(this);
-        broadCastMessage("SERVER : " + clientUsername + " has left the chat...(ツ)");
+        broadCastMessage(encodeMessage("SERVER : " + clientUsername + " has left the chat...(ツ)"));
     }
 
     //close down connection and stram
