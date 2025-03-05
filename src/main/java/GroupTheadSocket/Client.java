@@ -57,9 +57,58 @@ public class Client {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                
+                String messageFromGroupChat;
+
+                while (socket.isConnected()){
+                    try {
+                        messageFromGroupChat = bufferedReader.readLine();
+                        System.out.println(messageFromGroupChat);
+                    } catch (IOException e) {
+                        closeEverything(socket, bufferedReader, bufferedWriter);
+                    }
+
+                }
             }
-        });
+        }).start();
+    }
+
+    //close down connection and stram
+    public void closeEverything(Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter){
+        try {
+            if(bufferedReader != null){
+                bufferedReader.close();
+            }
+
+            if(bufferedWriter != null){
+                bufferedWriter.close();
+            }
+
+            if(socket != null){
+                socket.close();
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void main(String[] args) throws IOException {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter you username for Group chat ^_^ : ");
+        String username = scanner.nextLine();
+
+
+        //connect with server
+        Socket socket = new Socket("127.0.0.1", 1234);
+
+        Client client = new Client(socket, username);
+
+        //listen for messages
+        client.listenForMessgae();
+
+        //client send messages
+        client.sendMessage();
+
+
     }
 
 }
