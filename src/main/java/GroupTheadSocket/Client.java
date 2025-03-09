@@ -27,7 +27,7 @@ public class Client {
             //get mssages for other clients
             this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-            this.username = username;
+//            this.username = username;
 
 
         } catch (IOException e) {
